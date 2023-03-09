@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-
-
+import { userRequest } from '../axiosInstance'
+import { useLocation } from 'react-router-dom'
 
 const Container = styled.div`
   padding: 1rem 0.5rem;  
@@ -16,10 +16,14 @@ const Container = styled.div`
 `;
 
 const ProductImgContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
     overflow: hidden;
 `
 
 const ProductImage = styled.img`
+
   max-width: 100%;
   max-height: 100%;
   border-radius: 4px;
@@ -108,29 +112,47 @@ const BuyNowButton = styled.button`
 `;
 
 const ProductPage = () => {
+  const location = useLocation();
+  const id = location.pathname.split("/")[2];
+
+  const [product, setproduct] = useState({})
+  useEffect(() => {
+    (async () => {
+      try {
+        const {data} = await userRequest.get(`/product/${id}`)
+        setproduct(data);
+      } catch (error) {
+        console.log(error)
+      }
+    })()
+  }, [])
+  
+
   return (
-    <Container>
-        <ProductImgContainer>
-            <ProductImage src="https://cdn.pixabay.com/photo/2020/05/26/09/32/product-5222398_960_720.jpg" alt="Product" />
-        </ProductImgContainer>
-      <ProductDetails>
-        <ProductTitle>Product Title</ProductTitle>
-        <ProductPrice>Price : 100 rs</ProductPrice>
-        <ProductDescription>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce quis lectus at mi faucibus maximus. Etiam rhoncus, augue sit amet semper congue, lectus felis efficitur quam, nec commodo nibh libero in enim.
-        </ProductDescription>
-        
-        <BottomSection>
-            <QuatitySection>
-                Quantity : <select>{Array(5).fill().map((a,i) => <option>{i}</option>)}</select>
-            </QuatitySection>
-            <ButtonWrapper>
-                <AddToCartButton>Add to Cart</AddToCartButton>
-                <BuyNowButton>Buy Now</BuyNowButton>
-            </ButtonWrapper>
-        </BottomSection>
-      </ProductDetails>
-    </Container>
+    <>
+      {product ? 
+        <Container>
+            <ProductImgContainer>
+                <ProductImage src={product.img} alt={product.title} />
+            </ProductImgContainer>
+          <ProductDetails>
+            <ProductTitle>{product.title}</ProductTitle>
+            <ProductPrice>Price : {product.price}</ProductPrice>
+            <ProductDescription>{product.description}</ProductDescription>
+            
+            <BottomSection>
+                <QuatitySection>
+                    Quantity : <select>{Array(product.stock > 10 ? 10 : product.stock).fill().map((_,i) => <option>{++i}</option>)}</select>
+                </QuatitySection>
+                <ButtonWrapper>
+                    <AddToCartButton>Add to Cart</AddToCartButton>
+                    <BuyNowButton>Buy Now</BuyNowButton>
+                </ButtonWrapper>
+            </BottomSection>
+          </ProductDetails>
+        </Container>
+      : null}
+    </>
   );
 };
 

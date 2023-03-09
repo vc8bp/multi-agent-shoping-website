@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom'
 
 const NavbarWrapper = styled.nav`
 box-sizing: border-box;
@@ -15,7 +16,8 @@ box-sizing: border-box;
 
 `;
 
-const NavbarBrand = styled.a`
+const NavbarBrand = styled.p`
+  cursor: pointer;  
   font-size: 1.5rem;
   font-weight: bold;
   color: #fff;
@@ -27,7 +29,8 @@ const NavbarMenu = styled.div`
   flex-direction: row;
 `;
 
-const NavbarItem = styled.a`
+const NavbarItem = styled.p`
+cursor: pointer;
   font-size: 1rem;
   margin: 0 1rem;
   color: #fff;
@@ -42,13 +45,13 @@ const NavbarItem = styled.a`
 const Navbar = () => {
   return (
     <NavbarWrapper>
-      <NavbarBrand href="#">My Multi-Agent System</NavbarBrand>
+      <Link to="/"><NavbarBrand href="#">My Multi-Agent System</NavbarBrand></Link>
       <NavbarMenu>
-        <NavbarItem href="#">Home</NavbarItem>
-        <NavbarItem href="#">Agents</NavbarItem>
-        <NavbarItem href="#">Products</NavbarItem>
-        <NavbarItem href="#">Cart</NavbarItem>
-        <NavbarItem href="#">Login</NavbarItem>
+        {/* <Link to="/agents"><NavbarItem href="#">Agents</NavbarItem></Link>
+        <Link to="/products"><NavbarItem href="#">Products</NavbarItem></Link>
+        <Link to="/cart"><NavbarItem href="#">Cart</NavbarItem></Link> */}
+        <Link to="/login"><NavbarItem href="#">Login</NavbarItem></Link>
+        <Link to="/register"><NavbarItem href="#">Register</NavbarItem></Link>
       </NavbarMenu>
     </NavbarWrapper>
   );

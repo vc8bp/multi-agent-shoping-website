@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { userRequest } from '../axiosInstance'
 
 const Container = styled.div`
-  height: 100vh;
-  height: 100dvh;
+  height: calc(100vh - 65px);
+  height: calc(100dvh - 65px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -17,6 +18,7 @@ const Title = styled.h1`
 `;
 
 const Form = styled.form`
+  gap: 1rem;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -24,13 +26,26 @@ const Form = styled.form`
 `;
 
 const Input = styled.input`
-  margin-bottom: 1rem;
   padding: 0.5rem;
   border: none;
   border-radius: 4px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
   font-size: 1rem;
 `;
+
+const ErrorWrapper = styled.div`
+  border: solid 1px red;
+  padding: 0.4rem 0;
+  background-color: #ffcccb;
+  border-radius: 1vmin;
+`
+
+const Error = styled.p`
+  margin: auto;
+  width: max-content;
+  color: red;
+  font-weight: 600;
+`
 
 const Button = styled.button`
   background-color: #0077cc;
@@ -48,20 +63,37 @@ const Button = styled.button`
 `;
 
 const LoginPage = () => {
-  const [formValues, setFormValues] = useState({
-    email: '',
-    password: '',
-  });
+  const navigate = useNavigate()
+  const [message, setmessage] = useState(null)
+  const [formValues, setFormValues] = useState({ email: '', password: '' });
 
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormValues({ ...formValues, [name]: value });
   };
 
-  const handleSubmit = (event) => {
+  const validate = () => {
+    if(!formValues.email.match(/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-]+)(\.[a-zA-Z]{2,5}){1,2}$/)) {
+      return {message: "emai that you entered is not valid"}
+    }
+     return {success: true}
+
+  }
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(formValues);
-    // Here you can add your code to send the form data to the backend.
+    const valid = validate();
+    if(!valid.success) return setmessage(valid.message)
+    setmessage(null)
+    try {
+      const res = await userRequest.post('/auth/login',formValues)
+      if(res.status === 200) {
+        localStorage.setItem("userData", res.data)
+        navigate("/")
+      }
+    } catch (error) {
+      setmessage(error.response.data.message)
+    }
   };
 
   return (
@@ -69,6 +101,7 @@ const LoginPage = () => {
       <Title>Login</Title>
       <Form onSubmit={handleSubmit}>
         <Input
+          required
           type="email"
           name="email"
           placeholder="Email"
@@ -76,12 +109,15 @@ const LoginPage = () => {
           onChange={handleChange}
         />
         <Input
+          required
           type="password"
           name="password"
           placeholder="Password"
+          autoComplete='on'
           value={formValues.password}
           onChange={handleChange}
         />
+        {message && <ErrorWrapper><Error>{message}</Error></ErrorWrapper>}
         <Button type="submit">Login</Button>
       </Form>
       <p>Don't have an account? <Link to="/register">Register</Link></p>
