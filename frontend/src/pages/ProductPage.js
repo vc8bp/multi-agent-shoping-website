@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { userRequest } from '../axiosInstance'
 import { useLocation } from 'react-router-dom'
+import ProductList from '../components/ProductList';
 
 const Container = styled.div`
   padding: 1rem 0.5rem;  
@@ -38,6 +39,22 @@ const ProductDetails = styled.div`
   background-color: #fff;
   border-radius: 4px;
 `;
+
+const ProductTitleAgentWraper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 60%;
+    min-width: 360px;
+    @media screen and (max-width: 900px) {
+        width: 100%;
+    }
+    @media screen and (max-width: 410px) {
+        gap: 1rem;
+        flex-direction: column;
+    }
+
+`
 
 const ProductTitle = styled.h1`
   font-size: 2rem;
@@ -125,24 +142,28 @@ const ProductPage = () => {
         console.log(error)
       }
     })()
-  }, [])
+  }, [id])
   
 
   return (
     <>
       {product ? 
+      <>
         <Container>
             <ProductImgContainer>
                 <ProductImage src={product.img} alt={product.title} />
             </ProductImgContainer>
           <ProductDetails>
-            <ProductTitle>{product.title}</ProductTitle>
+            <ProductTitleAgentWraper>
+              <ProductTitle>{product.title}</ProductTitle>
+              <ProductTitle>{product.agent?.name}</ProductTitle>
+            </ProductTitleAgentWraper>
             <ProductPrice>Price : {product.price}</ProductPrice>
             <ProductDescription>{product.description}</ProductDescription>
             
             <BottomSection>
                 <QuatitySection>
-                    Quantity : <select>{Array(product.stock > 10 ? 10 : product.stock).fill().map((_,i) => <option>{++i}</option>)}</select>
+                    Quantity : <select>{Array(product.stock > 10 ? 10 : product.stock).fill().map((_,i) => <option key={i}>{++i}</option>)}</select>
                 </QuatitySection>
                 <ButtonWrapper>
                     <AddToCartButton>Add to Cart</AddToCartButton>
@@ -151,6 +172,11 @@ const ProductPage = () => {
             </BottomSection>
           </ProductDetails>
         </Container>
+          <div className="container">
+            More Products of {product?.agent?.name}
+            <ProductList limit={5} agent={product?.agent} />
+          </div>
+      </>
       : null}
     </>
   );

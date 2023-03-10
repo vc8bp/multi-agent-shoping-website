@@ -33,6 +33,7 @@ const FooterLink = styled.a`
 const SocialMediaIcons = styled.div`
   display: flex;
   justify-content: center;
+  align-items: center;
   margin-bottom: 16px;
 `;
 
@@ -41,6 +42,12 @@ const SocialMediaIcon = styled.a`
   margin: 0 8px;
   text-decoration: none;
   transition: color 0.2s ease-in-out;
+
+  >* {
+    width: 40px;
+    height: 40px;
+
+  }
 
   &:hover {
     color: #d4af37;
@@ -56,17 +63,14 @@ const Footer = () => {
         <FooterLink href="#">Contact</FooterLink>
       </FooterLinks>
       <SocialMediaIcons>
-        <SocialMediaIcon href="#">
-          <i className="fab fa-facebook-f"></i>
+        <SocialMediaIcon href="https://facebook.com">
+          <img alt='Facebook' src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Facebook_Logo_%282019%29.png/1024px-Facebook_Logo_%282019%29.png"></img>
         </SocialMediaIcon>
-        <SocialMediaIcon href="#">
-          <i className="fab fa-twitter"></i>
+        <SocialMediaIcon href="https://twitter.com">
+          <img alt='twitter' src='https://www.iconpacks.net/icons/2/free-twitter-logo-icon-2429-thumb.png' ></img>
         </SocialMediaIcon>
-        <SocialMediaIcon href="#">
-          <i className="fab fa-instagram"></i>
-        </SocialMediaIcon>
-        <SocialMediaIcon href="#">
-          <i className="fab fa-linkedin-in"></i>
+        <SocialMediaIcon href="https://instagram.com">
+          <img alt='instagram' src="https://cdn-icons-png.flaticon.com/512/174/174855.png"></img>
         </SocialMediaIcon>
       </SocialMediaIcons>
       <p>&copy; 2023 My Website. All rights reserved.</p>

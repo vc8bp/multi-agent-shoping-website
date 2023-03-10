@@ -48,8 +48,8 @@ const Navbar = () => {
       <Link to="/"><NavbarBrand href="#">My Multi-Agent System</NavbarBrand></Link>
       <NavbarMenu>
         {/* <Link to="/agents"><NavbarItem href="#">Agents</NavbarItem></Link>
-        <Link to="/products"><NavbarItem href="#">Products</NavbarItem></Link>
         <Link to="/cart"><NavbarItem href="#">Cart</NavbarItem></Link> */}
+        <Link to="/products"><NavbarItem href="#">Products</NavbarItem></Link>
         <Link to="/login"><NavbarItem href="#">Login</NavbarItem></Link>
         <Link to="/register"><NavbarItem href="#">Register</NavbarItem></Link>
       </NavbarMenu>

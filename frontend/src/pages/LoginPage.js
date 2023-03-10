@@ -73,10 +73,10 @@ const LoginPage = () => {
   };
 
   const validate = () => {
-    if(!formValues.email.match(/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-]+)(\.[a-zA-Z]{2,5}){1,2}$/)) {
+    if(!formValues.email.match("/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-]+)(\.[a-zA-Z]{2,5}){1,2}$/")) { // eslint-disable-line
       return {message: "emai that you entered is not valid"}
     }
-     return {success: true}
+    return {success: true}
 
   }
 

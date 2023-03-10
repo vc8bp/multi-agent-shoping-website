@@ -5,6 +5,7 @@ import LoginPage from './pages/LoginPage';
 import Navbar from './components/NavBar';
 import ProductPage from './pages/ProductPage';
 import HomePage from './pages/HomePage';
+import ProductsPage from './pages/ProductsPage';
 
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <Route path='/register' element={<RegisterPage/> } />
         <Route path='/login' element={<LoginPage/> } />
         <Route path='/product/:id' element={<ProductPage/> } />
+        <Route path='/products' element={<ProductsPage/> } />
       </Routes>
     </>
   );

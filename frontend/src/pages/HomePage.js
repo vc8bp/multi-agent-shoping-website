@@ -9,6 +9,7 @@ const Container = styled.div`
 `
 const ProductsContainer = styled.div``
 const Title = styled.span`
+font-weight: bold;
   font-size: 1.2rem;
 `
 
