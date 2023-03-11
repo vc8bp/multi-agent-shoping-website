@@ -1,6 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../redux/userSlice';
+import useIsUserValid from '../helpers/auth';
 
 const NavbarWrapper = styled.nav`
 box-sizing: border-box;
@@ -43,15 +46,22 @@ cursor: pointer;
 
 
 const Navbar = () => {
+  const dispatch = useDispatch()
+  const user = useIsUserValid()
   return (
     <NavbarWrapper>
       <Link to="/"><NavbarBrand href="#">My Multi-Agent System</NavbarBrand></Link>
       <NavbarMenu>
-        {/* <Link to="/agents"><NavbarItem href="#">Agents</NavbarItem></Link>
-        <Link to="/cart"><NavbarItem href="#">Cart</NavbarItem></Link> */}
+        {user ? <>
+          <Link to="/cart"><NavbarItem href="#">Cart</NavbarItem></Link>
+          <NavbarItem onClick={() => dispatch(logout())}>Logout</NavbarItem>
+        </>:<>
+          <Link to="/login"><NavbarItem href="#">Login</NavbarItem></Link>
+          <Link to="/register"><NavbarItem href="#">Register</NavbarItem></Link>  
+        </>}
+        
         <Link to="/products"><NavbarItem href="#">Products</NavbarItem></Link>
-        <Link to="/login"><NavbarItem href="#">Login</NavbarItem></Link>
-        <Link to="/register"><NavbarItem href="#">Register</NavbarItem></Link>
+
       </NavbarMenu>
     </NavbarWrapper>
   );

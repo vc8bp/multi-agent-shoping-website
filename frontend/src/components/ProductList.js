@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ProductCard from './ProductCard';
 import styled from 'styled-components';
 import { userRequest } from '../axiosInstance';
+import NoProductsFound from './NoProductsFounf';
 
 const Container = styled.div`
   margin: 1rem 0;
@@ -35,12 +36,14 @@ const ProductList = ({limit, agent,  FmaxPrice, Fcat}) => {
 
   return (
     <Container>
-      {products && products.map(p => (
+      {products?.length ? products.map(p => (
         <ProductCard
           key={p._id}
           product={p}
         />
-      ))}
+      )):
+      <NoProductsFound/>
+      }
     </Container>
   );
 };

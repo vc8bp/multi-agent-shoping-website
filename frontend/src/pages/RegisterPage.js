@@ -79,7 +79,7 @@ const RegisterPage = () => {
   };
 
   const validate = () => {
-    const emailRegex = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-]+)(\.[a-zA-Z]{2,5}){1,2}$/; // eslint-disable-line
+    const emailRegex = "[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"; // eslint-disable-line
     if(!formValues.name.length > 3) return {message: "name can not be less then 3 charectors"}
     if(!formValues.email.match(emailRegex)) return {message: "emai that you entered is not valid"}
     if(formValues.password.length < 8) return {message: "Password must be atlist 8 charectors"}

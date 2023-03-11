@@ -1,4 +1,5 @@
 import React, {useState} from 'react'
+import { useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import ProductList from '../components/ProductList'
 import ProductsFilter from '../components/ProductsFilter'
@@ -17,6 +18,8 @@ const Right = styled.div`
 `
 
 function ProductsPage() {
+    const location = useLocation();
+    const agent = location.state?.agent || null;
     const [max, setMax] = useState(0)
     const [cat, setCat] = useState(0)
     const FmaxPrice = {value:max, set:setMax}
@@ -27,7 +30,7 @@ function ProductsPage() {
             <ProductsFilter  FmaxPrice={FmaxPrice} Fcat={Fcat}/>
         </Left>
         <Right>
-            <ProductList FmaxPrice={max!=="All"?max:null} Fcat={cat!=="All Products"?cat:null}/>
+            <ProductList FmaxPrice={max!=="All"?max:null} Fcat={cat!=="All Products"?cat:null}  agent={agent}/>
         </Right>
     </Container>
   )

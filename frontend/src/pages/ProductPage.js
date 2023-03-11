@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { userRequest } from '../axiosInstance'
 import { useLocation } from 'react-router-dom'
 import ProductList from '../components/ProductList';
+import { useDispatch } from 'react-redux';
+import { addToCart } from '../redux/cartSlice';
 
 const Container = styled.div`
   padding: 1rem 0.5rem;  
@@ -129,6 +131,8 @@ const BuyNowButton = styled.button`
 `;
 
 const ProductPage = () => {
+  const [quantity, setQuantity] = useState(1)
+  const dispatch = useDispatch()
   const location = useLocation();
   const id = location.pathname.split("/")[2];
 
@@ -144,6 +148,9 @@ const ProductPage = () => {
     })()
   }, [id])
   
+  const handleAddToCart = () => {
+    dispatch(addToCart({...product, quantity}))
+  }
 
   return (
     <>
@@ -163,18 +170,22 @@ const ProductPage = () => {
             
             <BottomSection>
                 <QuatitySection>
-                    Quantity : <select>{Array(product.stock > 10 ? 10 : product.stock).fill().map((_,i) => <option key={i}>{++i}</option>)}</select>
+                    Quantity : <select value={quantity} onChange={e => setQuantity(e.target.value)}>{Array(product.stock > 10 ? 10 : product.stock).fill().map((_,i) => <option key={i}>{++i}</option>)}</select>
                 </QuatitySection>
                 <ButtonWrapper>
-                    <AddToCartButton>Add to Cart</AddToCartButton>
+                    <AddToCartButton onClick={handleAddToCart}>Add to Cart</AddToCartButton>
                     <BuyNowButton>Buy Now</BuyNowButton>
                 </ButtonWrapper>
             </BottomSection>
           </ProductDetails>
         </Container>
-          <div className="container">
-            More Products of {product?.agent?.name}
-            <ProductList limit={5} agent={product?.agent} />
+        
+          <div  style={{margin: "1rem 0"}} >
+            <div className="container" >
+            <hr></hr>
+              More Products of {product?.agent?.name}
+              <ProductList limit={5} agent={product?.agent} />
+            </div>
           </div>
       </>
       : null}

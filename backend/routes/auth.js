@@ -7,15 +7,17 @@ const routes = require("express").Router();
 
 //login route
 routes.post("/login", async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, forSeller } = req.body;
   if(!email || !password) return res.status(402).json({message: "all feild's are required"})
 
+  const  q = forSeller ? Agent : User;
+
   try {
-    const user = await User.findOne({ email: email });
+    const user = await q.findOne({ email: email }).exec();
     if(!user) return res.status(404).json({ message: "No user found with this Email ID" });
     if (user.password !== password) return res.status(400).json({ message: "your password with this email dosent Matched" })
 
-    const token = createJWT({id: user._id, isAdmin: user.isAdmin})
+    const token = createJWT({id: user._id,isSeller: user.isSeller,  isAdmin: user.isAdmin})
     
     const finalUser = {...user._doc, token}
     delete finalUser.password;
@@ -46,26 +48,6 @@ routes.post("/register", async (req, res) => {
 
 //Agent///////////////////////////////////////////////
 
-routes.post("/agent/login", async (req, res) => {
-  const { email, password } = req.body;
-  if(!email || !password) return res.status(402).json({message: "all feild's are required"})
-
-  try {
-    const user = await Agent.findOne({ email: email });
-    if(!user) return res.status(404).json({ message: "No user found with this Email ID" });
-    if (user.password !== password) return res.status(400).json({ message: "your password with this email dosent Matched" })
-
-    const token = createJWT({id: user._id, isAdmin: user.isAdmin})
-    
-    const finalUser = {...user._doc, token}
-    delete finalUser.password;
-    res.status(200).json({...finalUser, token})
-    
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "internal server error" });
-  }
-});
 
 routes.post("/agent/register", async (req, res) => {
   const {email, password, name, desc, number} = req.body

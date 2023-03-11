@@ -7,11 +7,11 @@ const agentSchema = new mongoose.Schema({
   },
   desc: {
     type: String,
-    require: true
+    required: true
   },
   number: {
     type: String,
-    require: true,
+    required: true,
     unique: true
   },
   email: {
@@ -23,6 +23,10 @@ const agentSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  isSeller: {
+    type: Boolean,
+    required: true
+  }
 
 });
 

@@ -4,7 +4,7 @@ import axios from "axios";
 const BASE_URL =  "http://localhost:4000/api";
 
 function getAccessToken() {
-  const storage = JSON.parse(localStorage.getItem("user"))
+  const storage = localStorage.getItem("userData") ? JSON.parse(localStorage.getItem("userData")) : null
   const token =  storage ? storage.token : null;
   return token
 }
@@ -17,6 +17,7 @@ export const userRequest = axios.create({
 
 userRequest.interceptors.request.use(config => {
   const newToken = getAccessToken();
+  console.log(newToken)
   if (newToken) {
     config.headers.token = `Bearer ${newToken}`;
   }

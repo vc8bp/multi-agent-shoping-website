@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { userRequest } from '../axiosInstance'
+import { login } from '../redux/userSlice';
 
 const Container = styled.div`
   height: calc(100vh - 65px);
@@ -11,6 +13,26 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
 `;
+
+const Wrapper = styled.div`
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+`
+
+const ForContainer = styled.div`
+  width: 100%;
+  display: flex;
+
+  >div {
+    flex: 1;
+    border: 1px solid #0077cc;
+    border-bottom: 4px solid #0077cc;
+    padding: 0.7rem 0;
+    background-color: ${props => props.forSeller === true   ? "green" : "white"};
+  }
+`
+const ForSomeone = styled.div``
 
 const Title = styled.h1`
   font-size: 2rem;
@@ -22,7 +44,6 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 400px;
 `;
 
 const Input = styled.input`
@@ -63,7 +84,9 @@ const Button = styled.button`
 `;
 
 const LoginPage = () => {
+  const [forSeller, setforSeller] = useState(false)
   const navigate = useNavigate()
+  const dispatch = useDispatch()
   const [message, setmessage] = useState(null)
   const [formValues, setFormValues] = useState({ email: '', password: '' });
 
@@ -73,7 +96,7 @@ const LoginPage = () => {
   };
 
   const validate = () => {
-    if(!formValues.email.match("/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-]+)(\.[a-zA-Z]{2,5}){1,2}$/")) { // eslint-disable-line
+    if(!formValues.email.match(/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-]+)(\.[a-zA-Z]{2,5}){1,2}$/)) { // eslint-disable-line
       return {message: "emai that you entered is not valid"}
     }
     return {success: true}
@@ -86,9 +109,9 @@ const LoginPage = () => {
     if(!valid.success) return setmessage(valid.message)
     setmessage(null)
     try {
-      const res = await userRequest.post('/auth/login',formValues)
+      const res = await userRequest.post('/auth/login',{...formValues, forSeller})
       if(res.status === 200) {
-        localStorage.setItem("userData", res.data)
+        dispatch(login(res.data))
         navigate("/")
       }
     } catch (error) {
@@ -98,29 +121,26 @@ const LoginPage = () => {
 
   return (
     <Container>
-      <Title>Login</Title>
-      <Form onSubmit={handleSubmit}>
-        <Input
-          required
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={formValues.email}
-          onChange={handleChange}
-        />
-        <Input
-          required
-          type="password"
-          name="password"
-          placeholder="Password"
-          autoComplete='on'
-          value={formValues.password}
-          onChange={handleChange}
-        />
-        {message && <ErrorWrapper><Error>{message}</Error></ErrorWrapper>}
-        <Button type="submit">Login</Button>
-      </Form>
-      <p>Don't have an account? <Link to="/register">Register</Link></p>
+      <Wrapper>
+        <ForContainer>
+          <ForSomeone onClick={() => setforSeller(true)} forSeller={forSeller}>for Seller</ForSomeone>
+          <ForSomeone onClick={() => setforSeller(false)} forSeller={forSeller}>for User</ForSomeone>
+        </ForContainer>
+        <Title>Login as {forSeller ? "Seller" : "User"}</Title>
+        <Form onSubmit={handleSubmit}>
+          <Input required type="email" name="email" placeholder="Email"
+            value={formValues.email}
+            onChange={handleChange}
+          />
+          <Input required type="password" name="password" placeholder="Password" autoComplete='on'
+            value={formValues.password}
+            onChange={handleChange}
+          />
+          {message && <ErrorWrapper><Error>{message}</Error></ErrorWrapper>}
+          <Button type="submit">Login</Button>
+        </Form>
+        <p>Don't have an account? <Link to="/register">Register</Link></p>
+      </Wrapper>
     
     </Container>
   );
