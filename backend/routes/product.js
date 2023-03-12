@@ -1,5 +1,6 @@
 const { default: mongoose } = require('mongoose');
 const Products = require('../models/Products');
+const { verifySellerWithToken } = require('../muddlewares/checkTokens');
 const route = require('express').Router()
 
 
@@ -37,6 +38,21 @@ route.get('/:id', async (req, res) => {
         const products = await Products.findById(id);
         res.status(200).json(products)
     } catch (error) {
+        res.status(500).json({message: "Internal server error"}) 
+    }
+})
+
+route.post('/',verifySellerWithToken, async (req, res) => { 
+    try {
+        const products = await Products.create(req.body)
+        res.status(200).json(products)
+    } catch (error) {
+        if(error.name === "ValidationError"){
+            for(e in error.errors){
+                return res.status(400).json({sucess: false,message: err.errors[e].message});
+            }
+        }
+        res.status(500).json(error)
         res.status(500).json({message: "Internal server error"}) 
     }
 })

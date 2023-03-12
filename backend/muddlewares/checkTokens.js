@@ -1,7 +1,7 @@
-
+const jwt = require('jsonwebtoken')
 
 const verifyToken = (req, res, next) => {
-    const token = req.headers.token;
+    const token = req.headers.token.split(" ")[1];
     if(!token) return res.status(401).json({messgae: "You are not loged in"})
 
     jwt.verify(token, process.env.JWT_TOKEN_SECRATE ,(err, user) => {
@@ -13,11 +13,17 @@ const verifyToken = (req, res, next) => {
     });
 }
 
-const verifyAdminWithToken = () => {
+const verifyAdminWithToken = (req, res, next) => {
     verifyToken(req, res, () => {
         if(req.user.isAdmin !== true) return res.status(403).json({message: "you are not allowed to do thet"});
         next()
     })
 }
 
-module.exports = {verifyToken, verifyAdminWithToken};
+const verifySellerWithToken = (req, res, next) => {
+    verifyToken(req, res, () => {
+        if(req.user.isSeller !== true) return res.status(403).json({message: "you are not allowed to do thet"});
+        next()
+    })
+}
+module.exports = {verifyToken, verifyAdminWithToken, verifySellerWithToken};

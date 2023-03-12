@@ -67,7 +67,7 @@ const AddProduct = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
+    
     console.log(product);
     setProduct(initialState);
   };

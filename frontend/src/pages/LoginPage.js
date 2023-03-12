@@ -29,7 +29,7 @@ const ForContainer = styled.div`
     border: 1px solid #0077cc;
     border-bottom: 4px solid #0077cc;
     padding: 0.7rem 0;
-    background-color: ${props => props.forSeller === true   ? "green" : "white"};
+    background-color: ${props => props.forSeller === true ? "green" : "white"};
   }
 `
 const ForSomeone = styled.div``
