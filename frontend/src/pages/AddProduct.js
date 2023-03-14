@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { userRequest } from '../axiosInstance';
 
 const Form = styled.form`
   display: flex;
@@ -53,7 +55,7 @@ const Button = styled.button`
 `;
 
 const AddProduct = () => {
-  console.log("hello")
+  const agent = useSelector(s => s.user.user);
   const initialState = {title: '', description: '', img: '', price: '', stock: ''}
   const [product, setProduct] = useState(initialState);
 
@@ -65,11 +67,16 @@ const AddProduct = () => {
     }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    try {
+      const {data} = await userRequest.post("/product",{...product, agent: agent.name})
+      console.log(data)
+      setProduct(initialState);
+    } catch (error) {
+      console.log(error)
+    }
     
-    console.log(product);
-    setProduct(initialState);
   };
 
   return (

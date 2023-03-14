@@ -20,7 +20,7 @@ export default function HomePage() {
         <div className='container' >
             <ProductsContainer>
                 <Title>Top Products</Title>
-                <ProductList/>
+                <ProductList limit={5}/>
             </ProductsContainer>
         </div>
         <Footer/>

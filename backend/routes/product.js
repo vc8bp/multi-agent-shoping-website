@@ -5,12 +5,16 @@ const route = require('express').Router()
 
 
 route.get('/', async (req, res) => {
+    //pagination
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
     let q = Products.find()
     const filter = []
     const Fagent = req.query.agent;
     const Fmaxp = req.query.maxp;
     const Fcat = req.query.cat;
-    const limit = req.query.limit;
     console.log(req.query)
 
     if(limit) q.limit(limit)
@@ -18,13 +22,19 @@ route.get('/', async (req, res) => {
     if(Fmaxp) filter.push({"price" : {$lt : Fmaxp}})
     if(Fcat) filter.push({"category" :  {$regex: Fcat, $options: "i"}})
 
-    if(filter.length > 0){
-        q = q.find({$and: filter})
-    }
-
+    if(filter.length > 0) q = q.find({$and: filter})
+    
+  
+    const countQ = filter.length > 0 ?  Products.find({$and: filter}) : Products.find();
     try {
-        const products = await q.exec();
-        res.status(200).json(products)
+        const products = await q.skip(skip).exec();
+        const count = await countQ.countDocuments().exec();
+        res.status(200).json({
+            total: count,
+            currentPage: page,
+            totalPages: Math.ceil(count / limit),
+            products,
+        })
     } catch (error) {
         console.log(error)
         res.status(500).json({message: "Internal server error"}) 
@@ -42,17 +52,19 @@ route.get('/:id', async (req, res) => {
     }
 })
 
-route.post('/',verifySellerWithToken, async (req, res) => { 
+route.post('/', async (req, res) => { 
     try {
-        const products = await Products.create(req.body)
+        const agentName = req.body.agent
+        const data = {...req.body, agent: {name: agentName, _id: req.user.id}}
+        const products = await Products.create(data)
         res.status(200).json(products)
     } catch (error) {
         if(error.name === "ValidationError"){
             for(e in error.errors){
-                return res.status(400).json({sucess: false,message: err.errors[e].message});
+                return res.status(400).json({sucess: false,message: error.errors[e].message});
             }
         }
-        res.status(500).json(error)
+        console.log(error)
         res.status(500).json({message: "Internal server error"}) 
     }
 })

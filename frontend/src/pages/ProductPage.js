@@ -183,7 +183,7 @@ const ProductPage = () => {
           <div  style={{margin: "1rem 0"}} >
             <div className="container" >
             <hr></hr>
-              More Products of {product?.agent?.name}
+              <p>More Products of <b>{product?.agent?.name}</b></p>
               <ProductList limit={5} agent={product?.agent} />
             </div>
           </div>

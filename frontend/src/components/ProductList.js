@@ -10,14 +10,43 @@ const Container = styled.div`
   justify-content: center;
   flex-wrap: wrap;
   gap: 0.5rem;
+
+
 `
 
-const ProductList = ({limit, agent,  FmaxPrice, Fcat}) => {
+const PaginateComponent = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 
+`
+const PaginateWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  >* {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+  }
+`
+const Prev = styled.div`
+`
+const Numbers = styled.div`
+  background-color: ${props => props.active ? "#bde4bd": "white"};
+`
+const Next = styled.div`
+  
+`
 
+const ProductList = ({limit, agent,  FmaxPrice, Fcat, paginate}) => { 
+  const [page, setPage] = useState(1)
   const [products, setproducts] = useState(null)
     useEffect(() => {
-      let url = "/product?"
+      let url = `/product?page=${page}&`
       if(FmaxPrice) url += `maxp=${FmaxPrice}&`
       if(Fcat) url += `cat=${Fcat}&`
       if(agent) url += `agent=${agent._id}&`
@@ -31,12 +60,13 @@ const ProductList = ({limit, agent,  FmaxPrice, Fcat}) => {
           console.log(error)
         }
       })()
-    }, [agent, limit, FmaxPrice, Fcat])
+    }, [agent, limit, FmaxPrice, Fcat, page])
   
+    const totalPage = products?.totalPages;
 
   return (
     <Container>
-      {products?.length ? products.map(p => (
+      {products?.products?.length ? products.products.map(p => (
         <ProductCard
           key={p._id}
           product={p}
@@ -44,6 +74,22 @@ const ProductList = ({limit, agent,  FmaxPrice, Fcat}) => {
       )):
       <NoProductsFound/>
       }
+      
+      {paginate && <PaginateComponent>
+        <PaginateWrapper>
+          <Prev onClick={() => page !== 1 && setPage(page => page - 1)}>&larr;</Prev>
+
+            {new Array(totalPage).fill().map((_, i) => {
+              const pageNum = i + 1;
+              return (
+                <Numbers key={pageNum} onClick={() => setPage(pageNum)} active={page === pageNum}>
+                  {pageNum}
+                </Numbers>
+              );
+            })}
+          <Next onClick={() => totalPage !== page && setPage(page =>  page + 1)}>&rarr;</Next>
+        </PaginateWrapper>
+      </PaginateComponent>}
     </Container>
   );
 };

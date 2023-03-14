@@ -25,7 +25,7 @@ const agentSchema = new mongoose.Schema({
   },
   isSeller: {
     type: Boolean,
-    required: true
+    default: true
   }
 
 });

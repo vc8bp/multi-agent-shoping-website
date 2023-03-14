@@ -9,11 +9,15 @@ display: unset;
     display: flex;
 `
 const Left = styled.div`
+    height: 100vh;
+    height: 100dvh;
     position: sticky;
     top: 0;
     flex: 1;
+    min-width: 200px;
 `
 const Right = styled.div`
+    background-color: #eee;
     flex: 8;
 `
 
@@ -30,7 +34,7 @@ function ProductsPage() {
             <ProductsFilter  FmaxPrice={FmaxPrice} Fcat={Fcat}/>
         </Left>
         <Right>
-            <ProductList FmaxPrice={max!=="All"?max:null} Fcat={cat!=="All Products"?cat:null}  agent={agent}/>
+            <ProductList FmaxPrice={max!=="All"?max:null} Fcat={cat!=="All Products"?cat:null}  agent={agent} paginate={true}/>
         </Right>
     </Container>
   )

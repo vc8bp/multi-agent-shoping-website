@@ -11,6 +11,7 @@ import CartPage from './pages/CartPage';
 import AddProduct from './pages/AddProduct';
 import useIsUserValid from './helpers/auth';
 import TestComp from './pages/TestComp';
+import SellerDashboard from './pages/SellerDashboard';
 
 
 
@@ -55,7 +56,7 @@ function App() {
  
         <Route element={<IsSeller/>} >
           <Route exect path='/product/add' element={<AddProduct/> } />
-          <Route exect path='/test' element={<TestComp/> } />
+          <Route exect path='/dashboard' element={<SellerDashboard/> } />
         </Route>
       </Routes>
     </>

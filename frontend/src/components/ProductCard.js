@@ -2,13 +2,16 @@ import React from 'react';
 import styled from 'styled-components';
 import {Link} from 'react-router-dom'
 const CardWrapper = styled.div`
-background-color: white;
+  width: 250px;
+  max-width: 90%;
+
+
+  background-color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  width: 250px;
-  max-width: 90%;
+
   border-radius: 10px;
   overflow: hidden;
   transition: all 0.3s ease-in-out;
@@ -31,9 +34,8 @@ const CardImage = styled.img`
 `;
 
 const CardContent = styled.div`
-  height: 100px;
+  height: 110px;
   box-sizing: border-box;
-
   width: 100%;
   padding: 5px;
 `;
@@ -43,9 +45,15 @@ const CardTitle = styled.p`
   overflow: hidden;
   white-space: nowrap;
   font-weight: bold;
-  margin: 0 0 5px;
+  margin: 0;
 `;
 
+const AgentName = styled.p`
+  margin: 0 0 5px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+`;
 const CardPrice = styled.p`
   font-weight: bold;
   margin: 0 0 5px;
@@ -60,7 +68,7 @@ const CardDesc = styled.p`
 
 
 const ProductCard = ({ product }) => {
-  const {_id, img, title, price, description} = product;
+  const {_id, img, title, price, description, agent} = product;
   return (
     
       <CardWrapper>
@@ -71,6 +79,7 @@ const ProductCard = ({ product }) => {
         <CardContent>
           <Link to={`/product/${_id}`} style={{width: "100%"}}>
             <CardTitle>{title}</CardTitle>
+            <AgentName>{agent.name}</AgentName>
             <CardPrice>Price: {price}</CardPrice>
             <CardDesc>{description}</CardDesc>
           </Link>
