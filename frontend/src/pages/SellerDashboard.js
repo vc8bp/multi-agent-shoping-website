@@ -71,6 +71,25 @@ const PurchaseCount = styled.p`
   color: #888;
 `;
 
+const AddProduct = styled.div`
+
+  position: fixed;
+  right: 50px;
+  bottom: 50px;
+  padding: 0.5rem 1rem;
+  border: 1px solid green;
+  background-color: rgb(215 248 215);
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+
+  :hover{
+    border-radius: 5px;
+    background-color: rgb(166 248 166);
+    box-shadow: 0 0 15px 3px rgba(166, 248, 166, 0.5);
+  }
+
+`
+
 const SellerDashboard = () => {
     const navigate = useNavigate()
     const id = useSelector(state => state.user.user)._id;
@@ -87,23 +106,26 @@ const SellerDashboard = () => {
         })()
     },[])
     return (
-        <Container>
-        <Header>
+        <>
+          <Container>
+          <Header>
             <Title>My Products</Title>
             <Subtitle>View all of your uploaded products below</Subtitle>
-        </Header>
-        <ProductList>
-            {products?.products?.map(product => (
-            <ProductItem key={product._id} onClick={() => navigate(`/product/${product._id}`)}>
-                <ProductImage src={product.img} alt={product.title} />
-                <ProductName>{product.title}</ProductName>
-                <ProductPrice>${product.price}</ProductPrice>
-                <ProductStock>In Stock: {product.stock}</ProductStock>
-                <PurchaseCount>Purchases: {product?.purchaseCount || 10}</PurchaseCount>
-            </ProductItem>
-            ))}
-        </ProductList>
-        </Container>
+          </Header>
+          <ProductList>
+              {products?.products?.map(product => (
+              <ProductItem key={product._id} onClick={() => navigate(`/product/${product._id}`)}>
+                  <ProductImage src={product.img} alt={product.title} />
+                  <ProductName>{product.title}</ProductName>
+                  <ProductPrice>${product.price}</ProductPrice>
+                  <ProductStock>In Stock: {product.stock}</ProductStock>
+                  <PurchaseCount>Purchases: {product?.purchaseCount || 10}</PurchaseCount>
+              </ProductItem>
+              ))}
+          </ProductList>
+          </Container>
+          <AddProduct onClick={() => navigate('/product/add')}>Add Product</AddProduct>
+        </>
     );
 };
 

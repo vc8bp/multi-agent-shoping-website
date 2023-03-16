@@ -54,7 +54,23 @@ const Button = styled.button`
   margin-top: 1rem;
 `;
 
+const ImagePreview = styled.img`
+  width: 80%;
+  margin: 1rem auto;
+  border-radius: 10px;
+`
+
+const PreviewButton = styled.button`
+  border: 1px solid grey;
+  background: none;
+  padding: 0.3rem 1rem;
+  :disabled {
+    cursor: not-allowed;
+  }
+`
+
 const AddProduct = () => {
+  const [previewisHide, setPreviewisHide] = useState(false)
   const agent = useSelector(s => s.user.user);
   const initialState = {title: '', description: '', img: '', price: '', stock: ''}
   const [product, setProduct] = useState(initialState);
@@ -98,12 +114,21 @@ const AddProduct = () => {
         />
       </InputGroup>
       <InputGroup>
-        <Label htmlFor="img">Image URL</Label>
+        <div style={{display: "flex", justifyContent: "space-between", alignItems: "center"}}>
+          <Label htmlFor="img">Image URL</Label>
+          <PreviewButton 
+            onClick={() => setPreviewisHide(p => !p)}
+            type="button"
+            disabled={!product.img ? true : false}>
+              {previewisHide ? "Hide Preview" : "Preview"}
+          </PreviewButton>
+        </div>
         <Input type="url" name="img" id="img"
           value={product.img}
           onChange={handleChange}
           required
         />
+      {product.img && previewisHide &&<ImagePreview src={product.img}></ImagePreview>}
       </InputGroup>
       <InputGroup>
         <Label htmlFor="price">Price</Label>

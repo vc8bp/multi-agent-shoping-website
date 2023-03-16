@@ -29,10 +29,12 @@ const ForContainer = styled.div`
     border: 1px solid #0077cc;
     border-bottom: 4px solid #0077cc;
     padding: 0.7rem 0;
-    background-color: ${props => props.forSeller === true ? "green" : "white"};
+    
   }
 `
-const ForSomeone = styled.div``
+const ForSomeone = styled.div`
+  background-color: ${props => props.forSeller === true ? "rgb(182 225 255)" : "white"};
+`
 
 const Title = styled.h1`
   font-size: 2rem;
@@ -83,6 +85,12 @@ const Button = styled.button`
   }
 `;
 
+const GoToRegister = styled.p`
+  >a:hover {
+    text-decoration: underline;
+  }
+`
+
 const LoginPage = () => {
   const [forSeller, setforSeller] = useState(false)
   const navigate = useNavigate()
@@ -124,9 +132,9 @@ const LoginPage = () => {
       <Wrapper>
         <ForContainer>
           <ForSomeone onClick={() => setforSeller(true)} forSeller={forSeller}>for Seller</ForSomeone>
-          <ForSomeone onClick={() => setforSeller(false)} forSeller={forSeller}>for User</ForSomeone>
+          <ForSomeone onClick={() => setforSeller(false)} forSeller={!forSeller}>for User</ForSomeone>
         </ForContainer>
-        <Title>Login as {forSeller ? "Seller" : "User"}</Title>
+        <Title>Login</Title>
         <Form onSubmit={handleSubmit}>
           <Input required type="email" name="email" placeholder="Email"
             value={formValues.email}
@@ -137,9 +145,9 @@ const LoginPage = () => {
             onChange={handleChange}
           />
           {message && <ErrorWrapper><Error>{message}</Error></ErrorWrapper>}
-          <Button type="submit">Login</Button>
+          <Button type="submit">Login as {forSeller ? "Seller" : "User"}</Button>
         </Form>
-        <p>Don't have an account? <Link to="/register">Register</Link></p>
+        <GoToRegister>Don't have an account? <Link to="/register">Register</Link></GoToRegister>
       </Wrapper>
     
     </Container>

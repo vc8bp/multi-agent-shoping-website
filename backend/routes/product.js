@@ -27,7 +27,7 @@ route.get('/', async (req, res) => {
   
     const countQ = filter.length > 0 ?  Products.find({$and: filter}) : Products.find();
     try {
-        const products = await q.skip(skip).exec();
+        const products = await q.sort({_id: -1}).skip(skip).exec();
         const count = await countQ.countDocuments().exec();
         res.status(200).json({
             total: count,
@@ -52,12 +52,12 @@ route.get('/:id', async (req, res) => {
     }
 })
 
-route.post('/', async (req, res) => { 
+route.post('/', verifySellerWithToken, async (req, res) => { 
     try {
         const agentName = req.body.agent
         const data = {...req.body, agent: {name: agentName, _id: req.user.id}}
-        const products = await Products.create(data)
-        res.status(200).json(products)
+        await Products.create(data)
+        res.status(200).json({message: "Product Added successfully"})
     } catch (error) {
         if(error.name === "ValidationError"){
             for(e in error.errors){
