@@ -33,6 +33,7 @@ app.get("/test", async(req, res) => {
 
 app.use("/api/auth", require("./routes/auth.js"))
 app.use("/api/product", require("./routes/product.js"))
+app.use("/api/agent", require("./routes/agents.js"))
 
 app.listen(port, () => {
     console.log(`server is running on port ${port}`)

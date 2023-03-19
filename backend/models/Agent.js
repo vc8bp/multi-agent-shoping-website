@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
 const agentSchema = new mongoose.Schema({
+  logo: {
+    type: String,
+    required: true
+  },
   name: {
     type: String,
     required: true
@@ -26,6 +30,10 @@ const agentSchema = new mongoose.Schema({
   isSeller: {
     type: Boolean,
     default: true
+  },
+  isVerified: {
+    type: Boolean,
+    default: false
   }
 
 });

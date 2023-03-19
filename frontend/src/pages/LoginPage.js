@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { userRequest } from '../axiosInstance'
+import ErrorComponent from '../components/ErrorComponent';
 import { login } from '../redux/userSlice';
 
 const Container = styled.div`
@@ -56,19 +57,6 @@ const Input = styled.input`
   font-size: 1rem;
 `;
 
-const ErrorWrapper = styled.div`
-  border: solid 1px red;
-  padding: 0.4rem 0;
-  background-color: #ffcccb;
-  border-radius: 1vmin;
-`
-
-const Error = styled.p`
-  margin: auto;
-  width: max-content;
-  color: red;
-  font-weight: 600;
-`
 
 const Button = styled.button`
   background-color: #0077cc;
@@ -114,7 +102,7 @@ const LoginPage = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const valid = validate();
-    if(!valid.success) return setmessage(valid.message)
+    if(!valid.success) return setmessage({isError: true, message: valid.message})
     setmessage(null)
     try {
       const res = await userRequest.post('/auth/login',{...formValues, forSeller})
@@ -123,7 +111,7 @@ const LoginPage = () => {
         navigate("/")
       }
     } catch (error) {
-      setmessage(error.response.data.message)
+      setmessage({isError: true, message: error.response.data.message})
     }
   };
 
@@ -144,7 +132,7 @@ const LoginPage = () => {
             value={formValues.password}
             onChange={handleChange}
           />
-          {message && <ErrorWrapper><Error>{message}</Error></ErrorWrapper>}
+          {message && <ErrorComponent data={message} set={setmessage} />}
           <Button type="submit">Login as {forSeller ? "Seller" : "User"}</Button>
         </Form>
         <GoToRegister>Don't have an account? <Link to="/register">Register</Link></GoToRegister>

@@ -12,12 +12,13 @@ import AddProduct from './pages/AddProduct';
 import useIsUserValid from './helpers/auth';
 import TestComp from './pages/TestComp';
 import SellerDashboard from './pages/SellerDashboard';
+import AdminDashboard from './pages/Admin/AdminDashboard';
 
 
 
 const IsNotLogedin = () => {
   const user = useIsUserValid()
-  return !user ? <Outlet/> : <Navigate to="/" />
+  return (!user || user?.isAdmin) ? <Outlet/> : <Navigate to="/" />
 }
 
 const IsLogedin = () => {
@@ -27,9 +28,12 @@ const IsLogedin = () => {
 
 const IsSeller = () => {
   const user = useIsUserValid()
-  console.log(user)
   return user?.isSeller ? <Outlet/> : <Navigate to="/" />
+}
 
+const IsAdmin = () => {
+  const user = useIsUserValid()
+  return user?.isAdmin ? <Outlet/> : <Navigate to="/" />
 }
 
 
@@ -56,8 +60,13 @@ function App() {
  
         <Route element={<IsSeller/>} >
           <Route exect path='/product/add' element={<AddProduct/> } />
-          <Route exect path='/dashboard' element={<SellerDashboard/> } />
+          <Route exect path='/seller/dashboard' element={<SellerDashboard/> } />
         </Route>
+
+        <Route element={<IsAdmin/>}>
+          <Route exect path='/dashboard/*' element={<AdminDashboard/> } />
+        </Route>
+
       </Routes>
     </>
   );

@@ -17,7 +17,9 @@ routes.post("/login", async (req, res) => {
     if(!user) return res.status(404).json({ message: "No user found with this Email ID" });
     if (user.password !== password) return res.status(400).json({ message: "your password with this email dosent Matched" })
 
-    const token = createJWT({id: user._id,isSeller: user.isSeller,  isAdmin: user.isAdmin})
+    const {_id, isSeller, isAdmin, isVerified} = user;
+    tokenPayload = { id: _id, isSeller, isAdmin, isVerified }
+    const token = createJWT(tokenPayload)
     
     const finalUser = {...user._doc, token}
     delete finalUser.password;

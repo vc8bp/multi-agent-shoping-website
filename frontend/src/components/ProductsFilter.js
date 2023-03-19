@@ -78,7 +78,7 @@ const ProductsFilter = ({FmaxPrice, Fcat}) => {
           <OptionItem onClick={setCatFilter}>All Products</OptionItem>
           <OptionItem onClick={setCatFilter}>Electronics</OptionItem>
           <OptionItem onClick={setCatFilter}>Clothing</OptionItem>
-          <OptionItem onClick={setCatFilter} value="beauty">Beauty & Personal Care</OptionItem>
+          <OptionItem onClick={setCatFilter}>Beauty</OptionItem>
           <OptionItem onClick={setCatFilter}>Sports</OptionItem>
         </OptionList>
       </FilterOption>

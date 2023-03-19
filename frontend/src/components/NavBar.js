@@ -54,9 +54,11 @@ const Navbar = () => {
       <NavbarMenu>
         {user?.isSeller && <>
           <Link to="/product/add"><NavbarItem href="#">Add Products</NavbarItem></Link>
+          <Link to="/seller/dashboard"><NavbarItem href="#">Dashboard</NavbarItem></Link>
+        </>}
+        {user?.isAdmin && <>
           <Link to="/dashboard"><NavbarItem href="#">Dashboard</NavbarItem></Link>
         </>}
-
         <Link to="/products"><NavbarItem href="#">Products</NavbarItem></Link>
         {user ? <>
           <Link to="/cart"><NavbarItem href="#">Cart</NavbarItem></Link>

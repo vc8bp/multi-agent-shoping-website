@@ -1,6 +1,6 @@
 const { default: mongoose } = require('mongoose');
 const Products = require('../models/Products');
-const { verifySellerWithToken } = require('../muddlewares/checkTokens');
+const { SellerWithToken, verifyAdminWithToken, VerifiedSellerWithToken } = require('../muddlewares/checkTokens');
 const route = require('express').Router()
 
 
@@ -52,7 +52,9 @@ route.get('/:id', async (req, res) => {
     }
 })
 
-route.post('/', verifySellerWithToken, async (req, res) => { 
+
+
+route.post('/', VerifiedSellerWithToken, async (req, res) => { 
     try {
         const agentName = req.body.agent
         const data = {...req.body, agent: {name: agentName, _id: req.user.id}}

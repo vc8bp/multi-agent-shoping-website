@@ -20,10 +20,16 @@ const verifyAdminWithToken = (req, res, next) => {
     })
 }
 
-const verifySellerWithToken = (req, res, next) => {
+const SellerWithToken = (req, res, next) => {
     verifyToken(req, res, () => {
         if(req.user.isSeller !== true) return res.status(403).json({message: "you are not allowed to do thet"});
         next()
     })
 }
-module.exports = {verifyToken, verifyAdminWithToken, verifySellerWithToken};
+const VerifiedSellerWithToken = (req, res, next) => {
+    SellerWithToken(req, res, () => {
+        if(req.user.isVerified !== true) return res.status(403).json({message: "You are not Verified Seller"});
+        next()
+    })
+}
+module.exports = {verifyToken, verifyAdminWithToken, SellerWithToken, VerifiedSellerWithToken};

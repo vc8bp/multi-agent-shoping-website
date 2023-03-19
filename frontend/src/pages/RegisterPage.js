@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { userRequest } from '../axiosInstance';
+import ErrorComponent from '../components/ErrorComponent';
 
 const Container = styled.div`
   height: calc(100vh - 65px);
@@ -48,21 +49,6 @@ const Button = styled.button`
   }
 `;
 
-const ErrorWrapper = styled.div`
-  border: solid 1px red;
-  padding: 0.4rem 0;
-  background-color: #ffcccb;
-  border-radius: 1vmin;
-`
-
-const Error = styled.p`
-  margin: auto;
-  width: max-content;
-  color: red;
-  font-weight: 600;
-`
-
-
 const RegisterPage = () => {
   const navigate = useNavigate()
   const [message, setmessage] = useState(null)
@@ -90,13 +76,13 @@ const RegisterPage = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const isValidate = validate();
-    if(!isValidate.success) return setmessage(isValidate.message)
+    if(!isValidate.success) return setmessage({isError: true, message: isValidate.message})
     setmessage(null)
     try {
       const res = await userRequest.post('/auth/register', formValues)
       if(res.status === 200) navigate('/login')
     } catch (error) {
-      setmessage(error.response.data.message)
+      setmessage({isError: true, message: error.response.data.message})
     }
   };
 
@@ -138,7 +124,7 @@ const RegisterPage = () => {
           value={formValues.confirmPassword}
           onChange={handleChange}
         />
-        {message && <ErrorWrapper><Error>{message}</Error></ErrorWrapper>}
+        {message && <ErrorComponent data={message} set={setmessage}></ErrorComponent>}
         <Button type="submit">Register</Button>
       </Form>
       <p>Already have an account? <Link to="/login">Login</Link></p>

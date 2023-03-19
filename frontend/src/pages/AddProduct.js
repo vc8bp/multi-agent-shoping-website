@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { userRequest } from '../axiosInstance';
+import ErrorComponent from '../components/ErrorComponent';
 
 const Form = styled.form`
   display: flex;
@@ -33,6 +34,7 @@ const Input = styled.input`
 `;
 
 const TextArea = styled.textarea`
+  resize: none;
   font-size: 1.2rem;
   padding: 0.5rem;
   border-radius: 5px;
@@ -69,11 +71,13 @@ const PreviewButton = styled.button`
   }
 `
 
+
 const AddProduct = () => {
   const [previewisHide, setPreviewisHide] = useState(false)
   const agent = useSelector(s => s.user.user);
   const initialState = {title: '', description: '', img: '', price: '', stock: ''}
   const [product, setProduct] = useState(initialState);
+  const [message, setMessage] = useState()
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -87,9 +91,10 @@ const AddProduct = () => {
     event.preventDefault();
     try {
       const {data} = await userRequest.post("/product",{...product, agent: agent.name})
-      console.log(data)
+      setMessage({isError: false, message: "Product Added Sucessfully"})
       setProduct(initialState);
     } catch (error) {
+      setMessage({isError: true, message: error.response.data.message})
       console.log(error)
     }
     
@@ -146,8 +151,9 @@ const AddProduct = () => {
           required
         />
       </InputGroup>
+      {message && <InputGroup><ErrorComponent data={message} set={setMessage} /></InputGroup>}
       <Button type="submit">Add Product</Button>
       </Form>
-)}
+)}  
 
 export default AddProduct
