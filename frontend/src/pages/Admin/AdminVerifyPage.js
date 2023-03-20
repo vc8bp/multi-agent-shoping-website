@@ -85,7 +85,7 @@ const AdminVerifyPage = () => {
 
   useEffect(() => {
     const fetchAgents = async () => {
-      const res = await userRequest.get("/agent", { isVerified: true })
+      const res = await userRequest.get("/agent?isVerified=true")
       setAgents(res.data);
     };
     fetchAgents();

@@ -6,11 +6,11 @@ router.get("/",async (req, res) => {
     let q = Agent.find();
     const filter = [];
 
-    if(req.body.isVerified) filter.push({isVerified: false})
-
+    if(req.query.isVerified) filter.push({isVerified: false})
     if(filter.length > 0){
-        q += q.find({$and: filter})
+        q = q.find({$and: filter})
     }
+    
     try {
         const agents = await q.exec()
         res.status(200).json(agents);

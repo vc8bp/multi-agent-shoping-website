@@ -3,6 +3,8 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { userRequest } from '../axiosInstance';
+import {ReactComponent as  DeleteIcon} from '../assets/delete.svg'
+import ErrorComponent from '../components/ErrorComponent'
 
 const Container = styled.div`
   max-width: 800px;
@@ -26,10 +28,11 @@ const Subtitle = styled.p`
 
 const ProductList = styled.ul`
   list-style: none;
-  margin-top: 2rem;
+  padding: 0;
 `;
 
 const ProductItem = styled.li`
+position: relative;
   display: flex;
   align-items: center;
   align-items: center;
@@ -41,8 +44,24 @@ const ProductItem = styled.li`
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease-in-out;
 
+  >svg {
+    transform: scale(1.5);
+    fill: red;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+  }
+
   :hover {
+    font-weight: 400;
     transform: scale(1.1);
+  }
+  @media all and (max-width: 800px) {
+    flex-direction: column;
+    >* {
+      margin: 0;
+    }
   }
 `;
 
@@ -90,9 +109,17 @@ const AddProduct = styled.div`
 
 `
 
+const Error = styled.div`
+  top: 10px;
+  right: 10%;
+  left: 10%;
+  position: fixed;
+`
+
 const SellerDashboard = () => {
     const navigate = useNavigate()
     const id = useSelector(state => state.user.user)._id;
+    const [message, setMessage] = useState(null)
     const [products, setProducts] = useState([])
 
     useEffect(()  => {
@@ -105,6 +132,19 @@ const SellerDashboard = () => {
             }
         })()
     },[])
+
+    const handleDelete = (id) => {
+      (async () => {
+        try {
+            const {data} = await userRequest.delete(`/product/${id}`);
+            setProducts(p => ({...p, products: p.products.filter(pro => pro._id !== id)}))
+            setMessage({isError: false, message: data.message})
+        } catch (error) {
+          console.log(error)
+          setMessage({isError: true, message: error.response.data.message})
+        }
+    })()
+    }
     return (
         <>
           <Container>
@@ -120,10 +160,13 @@ const SellerDashboard = () => {
                   <ProductPrice>${product.price}</ProductPrice>
                   <ProductStock>In Stock: {product.stock}</ProductStock>
                   <PurchaseCount>Purchases: {product?.purchaseCount || 10}</PurchaseCount>
+                  <DeleteIcon onClick={e => {e.stopPropagation(); handleDelete(product._id);}}/>
               </ProductItem>
               ))}
           </ProductList>
+          {message && <Error><ErrorComponent data={message} set={setMessage}/></Error>}
           </Container>
+
           <AddProduct onClick={() => navigate('/product/add')}>Add Product</AddProduct>
         </>
     );

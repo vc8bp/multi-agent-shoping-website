@@ -1,4 +1,5 @@
-const { default: mongoose } = require('mongoose');
+const mongoose = require('mongoose');
+const { findOneAndDelete } = require('../models/Products');
 const Products = require('../models/Products');
 const { SellerWithToken, verifyAdminWithToken, VerifiedSellerWithToken } = require('../muddlewares/checkTokens');
 const route = require('express').Router()
@@ -70,5 +71,20 @@ route.post('/', VerifiedSellerWithToken, async (req, res) => {
         res.status(500).json({message: "Internal server error"}) 
     }
 })
+
+route.delete('/:id', VerifiedSellerWithToken, async (req, res) => { 
+    const id = new mongoose.Types.ObjectId(req.params.id);
+
+    if(!mongoose.isValidObjectId(id)) return res.status(404).json({message: "this is not a valid product ID"})
+    try {
+        const product = await Products.findOneAndDelete({$and : [{_id: id}, {"agent._id": req.user.id}]})
+        if(!product) return res.status(404).json({message: "No Product forun with this ID"})
+        res.status(200).json({message: "Product Deleted Successfully"})
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({message: "Internal server error"}) 
+    }
+})
+
 
 module.exports = route;

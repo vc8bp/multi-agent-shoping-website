@@ -35,6 +35,7 @@ const ForContainer = styled.div`
 `
 const ForSomeone = styled.div`
   background-color: ${props => props.forSeller === true ? "rgb(182 225 255)" : "white"};
+  cursor: pointer;
 `
 
 const Title = styled.h1`
@@ -119,8 +120,8 @@ const LoginPage = () => {
     <Container>
       <Wrapper>
         <ForContainer>
-          <ForSomeone onClick={() => setforSeller(true)} forSeller={forSeller}>for Seller</ForSomeone>
-          <ForSomeone onClick={() => setforSeller(false)} forSeller={!forSeller}>for User</ForSomeone>
+          <ForSomeone title='Login as Seller' onClick={() => setforSeller(true)} forSeller={forSeller}>for Seller</ForSomeone>
+          <ForSomeone title='Login as User' onClick={() => setforSeller(false)} forSeller={!forSeller}>for User</ForSomeone>
         </ForContainer>
         <Title>Login</Title>
         <Form onSubmit={handleSubmit}>
