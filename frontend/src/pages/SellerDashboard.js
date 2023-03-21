@@ -143,7 +143,7 @@ const SellerDashboard = () => {
           console.log(error)
           setMessage({isError: true, message: error.response.data.message})
         }
-    })()
+      })()
     }
     return (
         <>

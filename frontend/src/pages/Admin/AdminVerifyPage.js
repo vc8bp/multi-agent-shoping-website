@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { userRequest } from "../../axiosInstance";
+import ErrorComponent from "../../components/ErrorComponent";
 
 const Container = styled.div`
   display: flex;
@@ -79,8 +80,15 @@ const Btn = styled.button`
     box-shadow: 0 0 15px 8px ${p => p.color ? "rgba(0, 178, 241, 0.1)" : "rgba(255, 99, 71, 0.1)"};
   }
 `;
+const Error = styled.div`
+  top: 10px;
+  right: 10%;
+  left: 10%;
+  position: fixed;
+`
 
 const AdminVerifyPage = () => {
+  const [message, setMessage] = useState(null)
   const [agents, setAgents] = useState([]);
 
   useEffect(() => {
@@ -91,9 +99,16 @@ const AdminVerifyPage = () => {
     fetchAgents();
   }, []);
 
-  const handleVerify = async (id) => {
-    await axios.put(`/api/agents/${id}`, { isVerified: true });
-    setAgents(agents.filter((agent) => agent._id !== id));
+  const handleVerify = async (id, isVerified) => {
+    try {
+      const {data} = await userRequest.patch(`/agent/verify/${id}`, { isVerified: isVerified });
+      setAgents(agents.filter((agent) => agent._id !== id));
+      setMessage({message: data.message, isError: false})
+    } catch (error) {
+      console.log(error)
+      setMessage({message: error.response.data.message, isError: false})
+    }
+
   };
 
   return (
@@ -116,8 +131,8 @@ const AdminVerifyPage = () => {
                 <TextLight>{agent.desc}</TextLight>
               </AgentInfo>
               <AgentAction>
-                <Btn onClick={() => handleVerify(agent._id)}>Reject</Btn>
-                <Btn onClick={() => handleVerify(agent._id)} color="true">Accept</Btn>
+                <Btn onClick={() => handleVerify(agent._id,false)}>Reject</Btn>
+                <Btn onClick={() => handleVerify(agent._id,true)} color="true">Accept</Btn>
               </AgentAction>
             </AgentItem>
           ))}
@@ -125,6 +140,7 @@ const AdminVerifyPage = () => {
       ) : (
         <div>No agents to verify</div>
       )}
+      {message && <Error><ErrorComponent data={message} set={setMessage}/></Error>}
     </Container>
   );
 };

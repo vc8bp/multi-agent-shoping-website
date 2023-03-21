@@ -40,9 +40,7 @@ routes.post("/register", async (req, res) => {
   } catch (error) {
     console.log(error)
     if (error.code === 11000) {
-      return res
-        .status(401)
-        .json({ message: "user with this email already exist" });
+      return res.status(401).json({ message: `user with this ${Object.keys(error.keyPattern)[0]} already exist` });
     }
     res.status(500).json({ message: "internal server error" });
   }
@@ -60,9 +58,7 @@ routes.post("/agent/register", async (req, res) => {
   } catch (error) {
     console.log(error)
     if (error.code === 11000) {
-      return res
-        .status(401)
-        .json({ message: "user with this email already exist" });
+      return res.status(401).json({ message: `user with this ${Object.keys(error.keyPattern)[0] } already exist` });
     }
     res.status(500).json({ message: "internal server error" });
   }
