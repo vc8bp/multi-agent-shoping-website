@@ -5,23 +5,25 @@ import {ReactComponent as CrossIcon} from '../assets/cross.svg'
 const ErrorWrapper = styled.div`
   position: relative;
   border: solid 1px ${p => p.isError ? "red" : "green"};
-  padding: 0.4rem 0;
+  padding: 0.4rem 5px;
   background-color: ${p => p.isError ? "#ffcccb" : "#a6f7a8"};
   border-radius: 1vmin;
-
+  height: max-content;
+  display: flex;
+  justify-content:center;
   >p {
     color: ${p => p.isError ? "red" : "green"};
   }
 `
 
 const Error = styled.p`
-  width: 100%;
-  margin: auto;
-  width: max-content;
-
-  font-weight: 600;
+    margin: 0;
+    text-align: center;
+    width: 100%;
+    font-weight: 600;
 
   >svg {
+    opacity: 20%;
     cursor: pointer;
     position: absolute;
     height: 100%;
@@ -29,6 +31,10 @@ const Error = styled.p`
     right: 10px;
     top: 0;
     bottom: 0;
+
+    :hover {
+      opacity: 100%;
+    }
   }
 `
 
@@ -38,9 +44,9 @@ function ErrorComponent({data, set}) {
     useEffect(() => {
         let interval;
         if(data) {
-          interval = setInterval(() => {
-            set(null);
-          }, 5000);
+          // interval = setInterval(() => {
+          //   set(null);
+          // }, 5000);
         }
       
         return () => clearInterval(interval);

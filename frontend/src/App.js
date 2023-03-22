@@ -13,6 +13,7 @@ import useIsUserValid from './helpers/auth';
 import TestComp from './pages/TestComp';
 import SellerDashboard from './pages/SellerDashboard';
 import AdminDashboard from './pages/Admin/AdminDashboard';
+import SellerRegisterPage from './pages/SellerRegisterPage';
 
 
 
@@ -51,6 +52,7 @@ function App() {
 
         <Route element={<IsNotLogedin/>} >
           <Route exect path='/register' element={<RegisterPage/> } />
+          <Route exect path='/seller/register' element={<SellerRegisterPage/> } />
           <Route exect path='/login' element={<LoginPage/> } />
         </Route>
 

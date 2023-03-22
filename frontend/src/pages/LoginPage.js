@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { userRequest } from '../axiosInstance'
 import ErrorComponent from '../components/ErrorComponent';
@@ -81,7 +81,8 @@ const GoToRegister = styled.p`
 `
 
 const LoginPage = () => {
-  const [forSeller, setforSeller] = useState(false)
+  const location = useLocation() //
+  const [forSeller, setforSeller] = useState(location.state?.forSeller || false)
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const [message, setmessage] = useState(null)

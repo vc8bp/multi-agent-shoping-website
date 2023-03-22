@@ -1,7 +1,7 @@
 import axios from "axios";
 
 
-const BASE_URL =  "http://localhost:4000/api";
+const BASE_URL = process.env.BACKEND || "http://localhost:4000";
 
 function getAccessToken() {
   const storage = localStorage.getItem("userData") ? JSON.parse(localStorage.getItem("userData")) : null
@@ -11,7 +11,7 @@ function getAccessToken() {
 
 
 export const userRequest = axios.create({
-  baseURL: BASE_URL,
+  baseURL: `${BASE_URL}/api`,
 });
 
 userRequest.interceptors.request.use(config => {
