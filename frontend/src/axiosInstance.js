@@ -1,7 +1,7 @@
 import axios from "axios";
 
 
-const BASE_URL = process.env.BACKEND || "http://localhost:4000";
+const BASE_URL = process.env.REACT_APP_BACKEND || "http://localhost:4000";
 
 function getAccessToken() {
   const storage = localStorage.getItem("userData") ? JSON.parse(localStorage.getItem("userData")) : null
