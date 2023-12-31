@@ -53,7 +53,7 @@ const Navbar = () => {
       <Link to="/"><NavbarBrand href="#">My Multi-Agent System</NavbarBrand></Link>
       <NavbarMenu>
         {user?.isSeller && <>
-          <Link to="/product/add"><NavbarItem href="#">Add Products</NavbarItem></Link>
+          <Link to="/seller/coupon"><NavbarItem href="#">Coupons</NavbarItem></Link>
           <Link to="/seller/dashboard"><NavbarItem href="#">Dashboard</NavbarItem></Link>
         </>}
         {user?.isAdmin && <>
@@ -62,6 +62,7 @@ const Navbar = () => {
         <Link to="/products"><NavbarItem href="#">Products</NavbarItem></Link>
         {user ? <>
           <Link to="/cart"><NavbarItem href="#">Cart</NavbarItem></Link>
+          <Link to="/order"><NavbarItem href="#">Orders</NavbarItem></Link>
           <NavbarItem onClick={() => dispatch(logout())}>Logout</NavbarItem>
         </>:<>
           <Link to="/login"><NavbarItem href="#">Login</NavbarItem></Link>

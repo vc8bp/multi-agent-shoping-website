@@ -14,6 +14,9 @@ import TestComp from './pages/TestComp';
 import SellerDashboard from './pages/SellerDashboard';
 import AdminDashboard from './pages/Admin/AdminDashboard';
 import SellerRegisterPage from './pages/SellerRegisterPage';
+import PaymentSuccess from './pages/PaymentSuccess';
+import OrdersPage from './pages/orders/OrdersPage';
+import Coupens from './pages/Admin/Coupens';
 
 
 
@@ -58,11 +61,14 @@ function App() {
 
         <Route element={<IsLogedin/>} >
           <Route exect path='/cart' element={<CartPage/> } />
+          <Route exact path="/paymentSuccess" element={<PaymentSuccess />}/>
+          <Route exact path="/order" element={<OrdersPage />}/>
         </Route>
  
         <Route element={<IsSeller/>} >
           <Route exect path='/product/add' element={<AddProduct/> } />
           <Route exect path='/seller/dashboard' element={<SellerDashboard/> } />
+          <Route exect path='/seller/coupon' element={<Coupens/> } />
         </Route>
 
         <Route element={<IsAdmin/>}>

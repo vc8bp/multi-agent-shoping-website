@@ -26,12 +26,19 @@ const Form = styled.form`
   max-width: 400px;
 `;
 
-const Input = styled.input`
+const SharedInputStyle = `
   padding: 0.5rem;
   border: none;
   border-radius: 4px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
   font-size: 1rem;
+`
+
+const Input = styled.input`
+  ${SharedInputStyle}
+`;
+const TextArea = styled.textarea`
+  ${SharedInputStyle}
 `;
 
 const Button = styled.button`
@@ -63,6 +70,7 @@ const RegisterPage = () => {
     email: '',
     password: '',
     confirmPassword: '',
+    address: '',
   });
 
   const handleChange = (event) => {
@@ -130,6 +138,16 @@ const RegisterPage = () => {
           value={formValues.confirmPassword}
           onChange={handleChange}
         />
+        <TextArea
+          required
+          type="text"
+          name="address"
+          placeholder="Address"
+          autoComplete='on'
+          value={formValues.address}
+          onChange={handleChange}
+        />
+        
         {message && <ErrorComponent data={message} set={setmessage}></ErrorComponent>}
         <Button type="submit">Register</Button>
       </Form>

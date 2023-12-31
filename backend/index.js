@@ -5,6 +5,7 @@ const Products = require('./models/Products.js')
 
 
 const app = express()
+app.use(express.urlencoded())
 app.use(express.json())
 app.use(cors())
 connectToMongo()
@@ -34,6 +35,8 @@ app.get("/test", async(req, res) => {
 app.use("/api/auth", require("./routes/auth.js"))
 app.use("/api/product", require("./routes/product.js"))
 app.use("/api/agent", require("./routes/agents.js"))
+app.use("/api/order", require("./routes/Order.js"))
+app.use("/api/coupon", require("./routes/coupon.js"))
 
 app.listen(port, () => {
     console.log(`server is running on port ${port}`)

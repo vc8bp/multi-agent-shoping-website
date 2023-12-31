@@ -1,8 +1,8 @@
 const mongoose = require('mongoose')
-const URL = "mongodb+srv://vc8bp:12345@cluster0.jfdnuyg.mongodb.net/?retryWrites=true&w=majority"
+require("dotenv").config()
 
 const connectToMongo = () => {
-    mongoose.connect(URL, {autoIndex: true}).then(() => {
+    mongoose.connect(process.env.DB_URI, {autoIndex: true}).then(() => {
         console.log("database connected sucessfully")
     }).catch((err) => {
         console.log(err)

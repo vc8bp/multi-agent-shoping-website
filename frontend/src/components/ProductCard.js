@@ -34,10 +34,16 @@ const CardImage = styled.img`
 `;
 
 const CardContent = styled.div`
+  position: relative;
   height: 110px;
   box-sizing: border-box;
   width: 100%;
   padding: 5px;
+  button{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
 `;
 
 const CardTitle = styled.p`
@@ -82,6 +88,7 @@ const ProductCard = ({ product }) => {
             <AgentName>{agent.name}</AgentName>
             <CardPrice>Price: {price}</CardPrice>
             <CardDesc>{description}</CardDesc>
+            <button>Buy</button>
           </Link>
         </CardContent>
       </CardWrapper>
